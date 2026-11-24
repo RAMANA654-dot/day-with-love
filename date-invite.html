@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>A Date With Me? 💗</title>
+
+<style>
+:root {
+    --pink: #d85b9a;
+    --light: #fff8fc;
+    --ink: #713d59;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 20% 20%, #fff 0, #fce5f1 38%, #f5d4e6 100%);
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--ink);
+    overflow: hidden;
+}
+
+.float {
+    position: fixed;
+    color: #e99abd;
+    opacity: 0.65;
+    animation: drift 7s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes drift {
+    50% {
+        transform: translateY(-22px) rotate(12deg);
+    }
+}
+
+.card {
+    width: min(92vw, 420px);
+    background: rgba(255,255,255,0.88);
+    border: 1px solid #f1c6dc;
+    border-radius: 18px;
+    padding: 28px 24px 25px;
+    text-align: center;
+    box-shadow: 0 16px 45px #b65a8520;
+    position: relative;
+}
+
+.heart {
+    font-size: 34px;
+    margin-bottom: 8px;
+}
+
+h1 {
+    font-size: clamp(22px, 5vw, 29px);
+    margin: 8px 0 13px;
+    color: #a7437c;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 8px 0 18px;
+}
+
+button {
+    border: 0;
+    border-radius: 30px;
+    padding: 12px 21px;
+    font: bold 14px Georgia;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    background: var(--pink);
+    color: white;
+    box-shadow: 0 5px 12px #d85b9a30;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    background: #c64b89;
+}
+
+.buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    min-height: 54px;
+    position: relative;
+}
+
+#noBtn {
+    background: #bda2d7;
+    color: white;
+    position: relative;
+}
+
+.hidden {
+    display: none !important;
+}
+
+label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    margin: 14px 0 6px;
+}
+
+input, select {
+    width: 100%;
+    border: 1px solid #e9bfd6;
+    background: #fffafd;
+    padding: 11px 12px;
+    border-radius: 9px;
+    font: 14px Georgia;
+    color: #713d59;
+    outline-color: #d85b9a;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    margin: 13px 0;
+}
+
+.vehicle {
+    background: #fff4fa;
+    border: 1px solid #e9bfd6;
+    color: #8c4770;
+    padding: 13px 5px;
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.vehicle.selected {
+    background: #d85b9a;
+    color: white;
+    border-color: #d85b9a;
+}
+
+.wide {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.note {
+    font-size: 12px;
+    color: #a47791;
+    margin-top: 15px;
+}
+
+.result {
+    background: #fff3fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin: 14px 0;
+    text-align: left;
+    line-height: 1.7;
+}
+</style>
+</head>
+
+<body>
+
+<span class="float" style="top:9%;left:12%;font-size:24px">♡</span>
+<span class="float" style="top:18%;right:13%;font-size:20px">✦</span>
+<span class="float" style="bottom:15%;left:9%;font-size:30px">♥</span>
+<span class="float" style="bottom:12%;right:10%;font-size:24px">♡</span>
+
+<main class="card">
+
+<!-- FIRST PAGE -->
+<section id="start">
+
+    <div class="heart">💌</div>
+
+    <h1>
+        Will you go on a date<br>
+        with me?
+    </h1>
+
+    <p>
+        I have a little plan, and it would be<br>
+        much sweeter with you.
+    </p>
+
+    <div class="buttons">
+
+        <button onclick="showPlan()">
+            YES! 💗
+        </button>
+
+        <button
+            id="noBtn"
+            onmouseenter="escapeNo()"
+            ontouchstart="escapeNo()"
+            onclick="escapeNo()">
+            No 🙈
+        </button>
+
+    </div>
+
+    <p class="note">
+        P.S. Try clicking “No” 😉
+    </p>
+
+</section>
+
+
+<!-- DATE PLAN PAGE -->
+<section id="plan" class="hidden">
+
+    <div class="heart">🌷</div>
+
+    <h1>So… when are you free?</h1>
+
+    <p>
+        Pick a day and time, I'll come to you.
+    </p>
+
+    <label for="day">
+        Which day should I come to receive you?
+    </label>
+
+    <input id="day" type="date">
+
+
+    <label for="time">
+        What time should I come?
+    </label>
+
+    <select id="time">
+
+        <option value="">Select a time…</option>
+
+        <option>9:00 AM</option>
+        <option>10:00 AM</option>
+        <option>11:00 AM</option>
+        <option>12:00 PM</option>
+        <option>1:00 PM</option>
+        <option>2:00 PM</option>
+        <option>3:00 PM</option>
+        <option>4:00 PM</option>
+        <option>5:00 PM</option>
+        <option>6:00 PM</option>
+        <option>7:00 PM</option>
+        <option>8:00 PM</option>
+
+    </select>
+
+
+    <label>
+        Which vehicle should I bring?
+    </label>
+
+    <div class="grid">
+
+        <button class="vehicle"
+            onclick="choose(this,'Scooty')">
+            🛵<br>Scooty
+        </button>
+
+        <button class="vehicle"
+            onclick="choose(this,'Bike')">
+            🏍️<br>Bike
+        </button>
+
+        <button class="vehicle"
+            onclick="choose(this,'Auto')">
+            🛺<br>Auto
+        </button>
+
+    </div>
+
+
+    <label for="place">
+        Where shall we go? (optional)
+    </label>
+
+    <input
+        id="place"
+        placeholder="A cute café, a long ride…">
+
+
+    <button class="wide" onclick="makePlan()">
+        Make our date plan 💗
+    </button>
+
+</section>
+
+
+<!-- FINAL PAGE -->
+<section id="done" class="hidden">
+
+    <div class="heart">🥰</div>
+
+    <h1>It's a date!</h1>
+
+    <p>
+        Can't wait to spend this lovely day with you.
+    </p>
+
+    <div id="summary" class="result"></div>
+
+    <p class="note" id="status"></p>
+
+    <button class="wide" onclick="sendWhatsApp()">
+        Send this plan on WhatsApp 💌
+    </button>
+
+    <button
+        class="wide"
+        style="background:#c5a4d9"
+        onclick="back()">
+        Change my choices
+    </button>
+
+</section>
+
+</main>
+
+
+<script>
+
+// Plans are emailed to this address (via FormSubmit.co)
+const MY_EMAIL = 'karthikramana222@gmail.com';
+
+let vehicle = '';
+
+
+// Show date planning page
+function showPlan() {
+
+    document.getElementById('start')
+        .classList.add('hidden');
+
+    document.getElementById('plan')
+        .classList.remove('hidden');
+
+    // Let me know she said YES
+    sendEmail('She said YES! 💗',
+        'She clicked YES and is now choosing the day, time and vehicle.');
+
+}
+
+
+// Make the NO button escape
+function escapeNo() {
+
+    const button = document.getElementById('noBtn');
+    const container = button.parentElement;
+
+    let x = Math.random() *
+        (container.clientWidth - button.offsetWidth);
+
+    let y = (Math.random() * 45) - 20;
+
+    button.style.position = 'absolute';
+
+    button.style.left = Math.max(0, x) + 'px';
+
+    button.style.top = y + 'px';
+
+    button.textContent = [
+        'No 🙈',
+        'Nope 😜',
+        'You can’t catch me!'
+    ][Math.floor(Math.random() * 3)];
+
+}
+
+
+// Select vehicle
+function choose(element, value) {
+
+    vehicle = value;
+
+    document.querySelectorAll('.vehicle')
+        .forEach(button => {
+            button.classList.remove('selected');
+        });
+
+    element.classList.add('selected');
+
+}
+
+
+// Email the answers to me
+function sendEmail(subject, message) {
+
+    return fetch('https://formsubmit.co/ajax/' + MY_EMAIL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            _subject: subject,
+            _template: 'box',
+            _captcha: 'false',
+            message: message
+        })
+    })
+    .then(r => r.ok)
+    .catch(() => false);
+
+}
+
+
+// Create date plan
+function makePlan() {
+
+    let day = document.getElementById('day').value;
+
+    let time = document.getElementById('time').value;
+
+    if (!day || !time || !vehicle) {
+
+        alert(
+            'Please choose the day, time, and vehicle 💗'
+        );
+
+        return;
+
+    }
+
+
+    let date = new Date(day + 'T12:00:00')
+        .toLocaleDateString(undefined, {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+
+    let place = document.getElementById('place').value
+        || 'a surprise place';
+
+
+    window.dateMessage =
+`Our date plan 💗
+
+Day: ${date}
+
+Pickup time: ${time}
+
+Vehicle: ${vehicle}
+
+Destination: ${place}`;
+
+
+    document.getElementById('summary').innerHTML =
+        '<b>Day:</b> ' + date +
+        '<br><b>Pickup time:</b> ' + time +
+        '<br><b>Vehicle:</b> ' + vehicle +
+        '<br><b>Destination:</b> ' + place;
+
+
+    document.getElementById('plan')
+        .classList.add('hidden');
+
+    document.getElementById('done')
+        .classList.remove('hidden');
+
+
+    // Email her final answers to me
+    let status = document.getElementById('status');
+    status.textContent = 'Sending your plan… 💌';
+
+    sendEmail('Date plan is ready! 💗', window.dateMessage)
+        .then(ok => {
+            status.textContent = ok
+                ? 'Your plan has been sent! 💗'
+                : '';
+        });
+
+}
+
+
+// Send plan through WhatsApp
+function sendWhatsApp() {
+
+    window.open(
+        'https://wa.me/?text=' +
+        encodeURIComponent(window.dateMessage),
+        '_blank'
+    );
+
+}
+
+
+// Go back and edit choices
+function back() {
+
+    document.getElementById('done')
+        .classList.add('hidden');
+
+    document.getElementById('plan')
+        .classList.remove('hidden');
+
+}
+
+</script>
+
+</body>
+</html>
